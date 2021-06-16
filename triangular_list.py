@@ -11,7 +11,24 @@ class Triangle:
     1
     >>> A[3, 2]
     1
-    >>> print(A)
+    >>> A
+        0, 1, 2, 3, 4
+    0 | #
+    1 | 0  #
+    2 | 0, 0  #
+    3 | 0, 0, 1  #
+    4 | 0, 0, 0, 0  #
+    >>> A.make_new_line()
+    >>> A
+        0, 1, 2, 3, 4, 5
+    0 | #
+    1 | 0  #
+    2 | 0, 0  #
+    3 | 0, 0, 1  #
+    4 | 0, 0, 0, 0  #
+    5 | 0, 0, 0, 0, 0  #
+    >>> A.remove_line()
+    >>> A
         0, 1, 2, 3, 4
     0 | #
     1 | 0  #
@@ -40,7 +57,12 @@ class Triangle:
         return self.triangle_list[poss[0]][poss[1]]
 
     def make_new_line(self):
-        self.triangle_list.append([self.def_value]*self.l) 
+        self.l += 1
+        self.triangle_list.append([self.def_value]*(self.l-1)) 
+
+    def remove_line(self):
+        self.l -= 1
+        del self.triangle_list[-1]
 
     def __str__(self) -> str:
         str_res = '    '+str([i for i in range(self.l)])[1:-1] + '\n'
@@ -50,8 +72,9 @@ class Triangle:
             str_res += f'{1+i} | '+str(line)[1:-1] + '  #\n'
         return str_res[:-1]
 
+    def __repr__(self) -> str:
+        return str(self)
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-
-         
