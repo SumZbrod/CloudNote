@@ -106,7 +106,22 @@ class Book:
         self.weights_table[ind, self.last_ind] -= 1
         return self[self.last_ind]
 
-class Library:
+class Library():
+    """
+    Library["name of book"][id notes]
+
+    >>> My_library = Library()
+    >>> My_library['A'] = Book()
+    >>> My_library['B'] = Book()
+    >>> My_library['C'] = Book()
+
+    >>> My_library['A'] += Note('qwerty', {2, 3, 4})
+    >>> My_library['B'] += Note('wasd', {4, 5, 6})
+    >>> My_library['B'] += Note('ijkl', {5, 6, 7})
+
+    >>> print(repr(My_library))
+    A: 1  B: 2  C: 0  
+    """
     def __init__(self) -> None:
         self.books = {}
 
