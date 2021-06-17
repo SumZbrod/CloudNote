@@ -11,7 +11,7 @@ class Note:
     def __repr__(self) -> str:
         return f'"{self.content}": {self.tags}'
     
-class Book:
+class Book(list):
     """
     >>> A_book = Book()
     >>> A_book += Note("a", {1, 2, 3})
@@ -48,32 +48,23 @@ class Book:
     d
     """
     def __init__(self) -> None:
-        self.len = 0
-        self.notes = []
+        super().__init__()
         self.tag_set = set()
         self.weights_table = triangular_list.Triangle(def_value=1)
         self.flag_make_new_weights_table = True
         self.last_ind = -1
 
-    def __add__(self, note:Note) -> None:
-        self.len += 1
-        self.notes.append(note)
+    def __iadd__(self, note:Note) -> None:
+        self.append(note)
         self.tag_set.update(note.tags)
         self.weights_table.make_new_line()
         self.flag_make_new_weights_table = True
         return self
     
-    def remove(self, ind:int) -> None:
-        self.len -= 1
-        self.notes.remove(ind)
-        self.weights_table.remove_line()
+    def del_note(self, ind:int) -> None:
+        del self[ind]
+        self.weights_table.del_line()
         self.flag_make_new_weights_table = True
-
-    def __getitem__(self, ind:int) -> None:
-        return self.notes[ind]
-
-    def __len__(self) -> int:
-        return self.len
 
     def IoU(self, A:set, B:set):
         V = A.intersection(B)
@@ -83,9 +74,9 @@ class Book:
 
     def make_weights_table_between_notes(self):
         self.last_ind = len(self) - 1
-        for i in range(self.len-1):
-            for j in range(i+1, self.len):
-                self.weights_table[i, j] = self.IoU(self.__getitem__(i).tags, self.__getitem__(j).tags)
+        for i in range(len(self)-1):
+            for j in range(i+1, len(self)):
+                self.weights_table[i, j] = self.IoU(self[i].tags, self[j].tags)
                 
     def get_next_note(self, ind:int=None):
         """
@@ -106,14 +97,14 @@ class Book:
         self.weights_table[ind, self.last_ind] -= 1
         return self[self.last_ind]
 
-class Library():
+class Library(dict):
     """
-    Library["name of book"][id notes]
+    Library["title"][id notes]
 
     >>> My_library = Library()
-    >>> My_library['A'] = Book()
-    >>> My_library['B'] = Book()
-    >>> My_library['C'] = Book()
+    >>> My_library.make_new_book('A')
+    >>> My_library.make_new_book('B')
+    >>> My_library.make_new_book('C')
 
     >>> My_library['A'] += Note('qwerty', {2, 3, 4})
     >>> My_library['B'] += Note('wasd', {4, 5, 6})
@@ -122,20 +113,14 @@ class Library():
     >>> print(repr(My_library))
     A: 1  B: 2  C: 0  
     """
-    def __init__(self) -> None:
-        self.books = {}
-
-    def __setitem__(self, title:str, book:Book) -> None:
-        self.books[title] = book
-    
-    def __getitem__(self, title:str) -> Book:
-        return self.books[title]
-    
     def __repr__(self) -> str:
         str_res = ''
-        for title in self.books:
-            str_res += f"{title}: {len(self.books[title])}  "
+        for title in self:
+            str_res += f"{title}: {len(self[title])}  "
         return str_res
+    
+    def make_new_book(self, title):
+        self[title] = Book()
 
 if __name__ == '__main__':
     import doctest

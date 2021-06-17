@@ -38,7 +38,7 @@ class Triangle:
     3 | 0, 0, 1  #
     4 | 0, 0, 0, 0  #
     5 | 0, 0, 0, 0, 0  #
-    >>> A.remove_line()
+    >>> A.del_line()
     >>> A
         0, 1, 2, 3, 4
     0 | #
@@ -74,7 +74,7 @@ class Triangle:
         if self.len >= 2:
             self.triangle_list.append([self.def_value]*(len(self)-1)) 
 
-    def remove_line(self):
+    def del_line(self):
         self.len -= 1
         del self.triangle_list[-1]
 
