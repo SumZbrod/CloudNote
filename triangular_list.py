@@ -78,7 +78,7 @@ class Triangle:
         self.len -= 1
         del self.triangle_list[-1]
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         str_res = '    '+str([i for i in range(len(self))])[1:-1] + '\n'
         #str_res += '  '+'_'*(self.len-1)*3 + '\n'
         str_res += '0 | #\n'
@@ -86,18 +86,9 @@ class Triangle:
             str_res += f'{1+i} | '+str(line)[1:-1] + '  #\n'
         return str_res[:-1]
 
-    def __repr__(self) -> str:
-        return str(self)
-
     def __len__(self):
         return self.len
         
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-    #A = Triangle()
-    #A.make_new_line()
-    #A.make_new_line()
-    #A.make_new_line()
-    #print(A)
-    #print(A.set_position([2, 0]))
